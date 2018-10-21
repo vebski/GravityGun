@@ -28,6 +28,11 @@ void AGGPhysicsItem::Tick(float DeltaTime)
 
 }
 
+FBox AGGPhysicsItem::GetPhysicsBounds() const
+{
+	return CalculateComponentsBoundingBoxInLocalSpace(false);
+}
+
 UPrimitiveComponent* AGGPhysicsItem::GetMainComponent() const
 {
 	return MainMeshComponent;
@@ -35,12 +40,10 @@ UPrimitiveComponent* AGGPhysicsItem::GetMainComponent() const
 
 bool AGGPhysicsItem::IsBigItem(float maxSize) const
 {
-	FVector origin = FVector::ZeroVector;
-	FVector extent = FVector::ZeroVector;
-	GetActorBounds(true, origin, extent);
+	FBox bounds = GetPhysicsBounds();
 
 	// check if x/y is greater then maxSize -> we don't really care about Z since it wont clip with any player meshes etc.
-	return FMath::Max(extent.X, extent.Y) > maxSize;
+	return FMath::Max(bounds.GetExtent().X * GetActorScale().X, bounds.GetExtent().Y * GetActorScale().Y) > maxSize;
 }
 
 

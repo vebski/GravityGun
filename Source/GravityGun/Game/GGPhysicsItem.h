@@ -32,6 +32,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	FBox GetPhysicsBounds() const;
+
 	// Returns main component responsible for physics
 	UPrimitiveComponent* GetMainComponent() const;
 	
