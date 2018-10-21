@@ -2,8 +2,10 @@
 
 #include "GGGravityPullComponent.h"
 #include "../GGPhysicsItem.h"
-#include "GGWeaponBase.h"
 #include "Components/PrimitiveComponent.h"
+#include "Camera/CameraComponent.h"
+#include "GGWeaponBase.h"
+#include "../Character/GGCharacter.h"
 
 
 UGGGravityPullComponent::UGGGravityPullComponent()
@@ -51,7 +53,20 @@ FVector UGGGravityPullComponent::UpdateTargetPosition(float deltaTime)
 	PulledItem->GetActorBounds(true, itemOrigin, itemExtent);
 
 	FVector targetOffset = itemOrigin - PulledItem->GetActorLocation();
-	FVector targetPos = PullTargetComponent->GetComponentLocation() - targetOffset;
+
+	// figure out what is the main target pos for pull
+	FVector targetPos = PullTargetComponent->GetComponentLocation();
+	if (OwningWeapon->GetOwningCharacter() != nullptr)
+	{
+		UCameraComponent* characterCamera = OwningWeapon->GetOwningCharacter()->GetCameraComponent();
+		if (characterCamera != nullptr)
+		{
+			targetPos = characterCamera->GetComponentLocation() + (characterCamera->GetForwardVector() * TargetCameraOffset);
+		}
+	}
+
+	// adjust targetpos with item offset
+	targetPos = targetPos - targetOffset;
 
 	// update target for physics handle
 	SetTargetLocationAndRotation(targetPos, PullTargetComponent->GetComponentRotation());
@@ -98,6 +113,11 @@ void UGGGravityPullComponent::SetPullTargetComponent(USceneComponent* pullTarget
 bool UGGGravityPullComponent::CanPull() const
 {
 	return	IsPullingItem() &&
-			Cast<AGGWeaponBase>(GetOwner()) != nullptr && Cast<AGGWeaponBase>(GetOwner())->CanFire();
+			OwningWeapon != nullptr && OwningWeapon->CanFire();
+}
+
+void UGGGravityPullComponent::SetOwningWeapon(AGGWeaponBase* owningWeapon)
+{
+	OwningWeapon = owningWeapon;
 }
 

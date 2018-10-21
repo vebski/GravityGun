@@ -22,10 +22,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay")
 	UGGGravityPullComponent* GravityPullComponent = nullptr;
-	
-
 
 	AGGWeaponGravityGun();
+	
+	virtual void BeginPlay() override;
 
 	virtual void PrimaryFire() override;
 

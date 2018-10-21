@@ -17,6 +17,13 @@ AGGWeaponGravityGun::AGGWeaponGravityGun()
 	GravityPullComponent->SetPullTargetComponent(PullTargetComponent);
 }
 
+void AGGWeaponGravityGun::BeginPlay()
+{
+	Super::BeginPlay();
+
+	GravityPullComponent->SetOwningWeapon(this);
+}
+
 void AGGWeaponGravityGun::PrimaryFire()
 {
 	// If we are pulling and object stop, and shoot (if there is any object fully pulled we will shoot it instead sending it forwards)

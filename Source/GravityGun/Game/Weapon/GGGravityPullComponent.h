@@ -25,6 +25,10 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	AGGPhysicsItem* PulledItem = nullptr;
 
+	// offset from camera for target based on camera position/dir
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+	float TargetCameraOffset = 120.0f;
+
 	// How far separated from PullTarget item can be, before it gets released
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
 	float ReleaseDist = 500.0f;
@@ -39,6 +43,9 @@ protected:
 	UPROPERTY()
 	USceneComponent* PullTargetComponent = nullptr;
 
+	// cached access
+	UPROPERTY()
+	AGGWeaponBase* OwningWeapon = nullptr;
 
 	UGGGravityPullComponent();
 
@@ -62,4 +69,6 @@ public:
 	}
 
 	bool CanPull() const;
+
+	void SetOwningWeapon(AGGWeaponBase* owningWeapon);
 };
