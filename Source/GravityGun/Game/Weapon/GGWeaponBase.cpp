@@ -103,7 +103,6 @@ void AGGWeaponBase::CompleteUnequop()
 
 AGGProjectileBase* AGGWeaponBase::SpawnProjectile(TSubclassOf<AGGProjectileBase> projectileTemplate)
 {
-
 	FTransform spawnTransform = MuzzleComponent->GetComponentTransform();
 	// check if projectile wants to spawn at center view and weapon is used by character with camera
 	if (projectileTemplate.GetDefaultObject() != nullptr && projectileTemplate.GetDefaultObject()->ShouldSpawnAtViewCenter())

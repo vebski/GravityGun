@@ -54,5 +54,5 @@ float AGGProjectileGravityBeam::CalculateForce(const FVector& targetPos) const
 FVector AGGProjectileGravityBeam::CalculateImpulseDir(const FHitResult& traceResult) const
 {
 	// #TODO_Dawid we should adjust the dir to push the object away from player in more predictable and "straight" line, currently its too random due to impact normal
-	return traceResult.ImpactNormal * -1.0f;
+	return GetActorForwardVector();
 }
