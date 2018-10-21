@@ -1,0 +1,16 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{1B7AD4ED-476E-1942-4DA0-8EA90DC7A82D}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "GravityGun",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		}
+	]
+}
