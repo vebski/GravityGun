@@ -20,25 +20,19 @@ AGGCharacter::AGGCharacter()
 	FPArmsMeshComponent->SetCastShadow(false);
 }
 
-// Called when the game starts or when spawned
 void AGGCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
-// Called every frame
 void AGGCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
-// Called to bind functionality to input
 void AGGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 
 FName AGGCharacter::GetWeaponSocketName() const

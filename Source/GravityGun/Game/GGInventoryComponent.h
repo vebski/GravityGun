@@ -35,16 +35,11 @@ protected:
 
 public:	
 
-	//void AddNewWeapon()
-
 	void SelectWeaponByIndex(const int32 weaponIndex);
 
 	void SelectNextWeapon();
 
 	void SelectPreviousWeapon();
-
-	///////////////////////////////////////////////////////////////////////////
-	// Get/Set
 
 	UFUNCTION(BlueprintCallable)
 	AGGWeaponBase* GetCurrentWeapon() const;

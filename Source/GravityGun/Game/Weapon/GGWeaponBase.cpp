@@ -28,13 +28,10 @@ AGGWeaponBase::AGGWeaponBase()
 void AGGWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
-
 }
 
 void AGGWeaponBase::UpdateWeapon(float deltaTime)
 {
-	// #TODO_Dawid wrap this into UpdateCooldowns function
 	CurrentEquipCooldown = FMath::Max(0.0f, CurrentEquipCooldown - deltaTime);
 	CurrentPrimaryFirerateCooldown = FMath::Max(0.0f, CurrentPrimaryFirerateCooldown - deltaTime);
 	CurrentSecondaryFirerateCooldown = FMath::Max(0.0f, CurrentSecondaryFirerateCooldown - deltaTime);
@@ -93,12 +90,12 @@ void AGGWeaponBase::HideWeaponVisuals()
 
 void AGGWeaponBase::CompleteEquip()
 {
-
+	// #TODO_Dawid this can be used in future to expand functionality (when inventory and picking up weapons works)
 }
 
-void AGGWeaponBase::CompleteUnequop()
+void AGGWeaponBase::CompleteUnequip()
 {
-
+	// #TODO_Dawid this can be used in future to expand functionality (when inventory and picking up weapons works)
 }
 
 AGGProjectileBase* AGGWeaponBase::SpawnProjectile(TSubclassOf<AGGProjectileBase> projectileTemplate)
@@ -152,7 +149,8 @@ void AGGWeaponBase::Equip()
 		AttachToComponent(OwningCharacter->GetWeaponAttachmentComponent(), FAttachmentTransformRules::KeepRelativeTransform, OwningCharacter->GetWeaponSocketName());
 	}
 
-	bIsReady = true; // #TODO_Dawid TEMP
+	
+	bIsReady = true; // #TODO_Dawid move to CompleteEquip when Equip/Unequip system is working
 	bIsEquipped = true;
 }
 

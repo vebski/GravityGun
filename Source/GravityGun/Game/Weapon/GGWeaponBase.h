@@ -105,7 +105,7 @@ protected:
 
 	virtual void CompleteEquip();
 
-	virtual void CompleteUnequop();
+	virtual void CompleteUnequip();
 
 	virtual AGGProjectileBase* SpawnProjectile(TSubclassOf<AGGProjectileBase> projectileTemplate);
 

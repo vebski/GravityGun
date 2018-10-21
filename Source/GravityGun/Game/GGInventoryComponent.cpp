@@ -13,7 +13,6 @@ UGGInventoryComponent::UGGInventoryComponent()
 
 }
 
-
 // Called when the game starts
 void UGGInventoryComponent::BeginPlay()
 {

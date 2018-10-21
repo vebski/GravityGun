@@ -21,7 +21,7 @@ class GRAVITYGUN_API UGGGravityPullComponent : public UPhysicsHandleComponent
 
 protected:
 
-	// #TODO_Dawid in gravity gun secondary mode attracts an item if there is none attracted, if there is an attracted item it drops it on the ground
+	// Currently pulled item to the target location
 	UPROPERTY(BlueprintReadOnly)
 	AGGPhysicsItem* PulledItem = nullptr;
 
