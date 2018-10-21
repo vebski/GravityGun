@@ -44,6 +44,8 @@ protected:
 
 	virtual void UpdatePull(float deltaTime);
 
+	virtual FVector UpdateTargetPosition(float deltaTime);
+
 public:	
 	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

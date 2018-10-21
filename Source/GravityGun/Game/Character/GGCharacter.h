@@ -41,7 +41,8 @@ public:
 
 	virtual USkeletalMeshComponent* GetWeaponAttachmentComponent() const;
 
-	
+	UCameraComponent* GetCameraComponent() const;
+
 	//FVector GetWeaponAttachmentPosition
 
 };

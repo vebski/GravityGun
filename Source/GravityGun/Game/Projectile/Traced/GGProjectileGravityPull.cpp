@@ -25,7 +25,7 @@ void AGGProjectileGravityPull::ProcessHits(const TArray<FHitResult>& traceResult
 			{
 				if (blockingActor->IsBigItem(MaxItemExtent) == true)
 				{
-					//Super::ProcessHits(traceResults);
+					Super::ProcessHits(traceResults);
 				}
 				else
 				{
@@ -45,4 +45,9 @@ void AGGProjectileGravityPull::StartPulling(AGGPhysicsItem* physicsItem)
 	check(gravityGun != nullptr); // this projectile has to be used in gravity gun!
 
 	gravityGun->PullPhysicsItem(physicsItem);
+}
+
+FVector AGGProjectileGravityPull::CalculateImpulseDir(const FHitResult& traceResult) const
+{
+	return Super::CalculateImpulseDir(traceResult) * -1.0f;
 }

@@ -4,10 +4,10 @@
 
 #include "Components/SceneComponent.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "../Character/GGCharacter.h"
+#include "Camera/CameraComponent.h"
 #include "Components/ArrowComponent.h"
+#include "../Character/GGCharacter.h"
 #include "../Projectile/GGProjectileBase.h"
-
 
 AGGWeaponBase::AGGWeaponBase()
 {
@@ -103,8 +103,20 @@ void AGGWeaponBase::CompleteUnequop()
 
 AGGProjectileBase* AGGWeaponBase::SpawnProjectile(TSubclassOf<AGGProjectileBase> projectileTemplate)
 {
-	AGGProjectileBase* newProjectile = GetWorld()->SpawnActor<AGGProjectileBase>(projectileTemplate, MuzzleComponent->GetComponentTransform());
+
+	FTransform spawnTransform = MuzzleComponent->GetComponentTransform();
+	// check if projectile wants to spawn at center view and weapon is used by character with camera
+	if (projectileTemplate.GetDefaultObject() != nullptr && projectileTemplate.GetDefaultObject()->ShouldSpawnAtViewCenter())
+	{
+		if (GetOwningCharacter() != nullptr && GetOwningCharacter()->GetCameraComponent() != nullptr)
+		{
+			spawnTransform = GetOwningCharacter()->GetCameraComponent()->GetComponentTransform();
+		}
+	}
+
+	AGGProjectileBase* newProjectile = GetWorld()->SpawnActor<AGGProjectileBase>(projectileTemplate, spawnTransform);
 	newProjectile->InitializeProjectile(this);
+
 
 	return newProjectile;
 }

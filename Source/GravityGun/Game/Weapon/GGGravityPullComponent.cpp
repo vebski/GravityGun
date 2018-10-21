@@ -22,16 +22,7 @@ void UGGGravityPullComponent::UpdatePull(float deltaTime)
 
 	checkSlow(PulledItem != nullptr);
 
-	// calculate targetPosition -> take into account the fact that center of object is not at the pivot
-	FVector itemOrigin = FVector::ZeroVector;
-	FVector itemExtent = FVector::ZeroVector;
-	PulledItem->GetActorBounds(true, itemOrigin, itemExtent);
-
-	FVector targetOffset = itemOrigin - PulledItem->GetActorLocation();
-	FVector targetPos = PullTargetComponent->GetComponentLocation() - targetOffset;
-
-	// update target for physics handle
-	SetTargetLocationAndRotation(targetPos, PullTargetComponent->GetComponentRotation());
+	FVector targetPos = UpdateTargetPosition(deltaTime);
 
 	const float distToItem = FVector::Dist(targetPos, PulledItem->GetActorLocation());
 	if (bReachedTarget == false)
@@ -50,6 +41,22 @@ void UGGGravityPullComponent::UpdatePull(float deltaTime)
 			StopPullingItem();
 		}
 	}
+}
+
+FVector UGGGravityPullComponent::UpdateTargetPosition(float deltaTime)
+{
+	// calculate targetPosition -> take into account the fact that center of object is not at the pivot
+	FVector itemOrigin = FVector::ZeroVector;
+	FVector itemExtent = FVector::ZeroVector;
+	PulledItem->GetActorBounds(true, itemOrigin, itemExtent);
+
+	FVector targetOffset = itemOrigin - PulledItem->GetActorLocation();
+	FVector targetPos = PullTargetComponent->GetComponentLocation() - targetOffset;
+
+	// update target for physics handle
+	SetTargetLocationAndRotation(targetPos, PullTargetComponent->GetComponentRotation());
+
+	return targetPos;
 }
 
 void UGGGravityPullComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

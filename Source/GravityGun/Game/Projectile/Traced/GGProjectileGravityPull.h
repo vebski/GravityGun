@@ -32,4 +32,5 @@ protected:
 
 	virtual void StartPulling(AGGPhysicsItem* physicsItem);
 
+	virtual FVector CalculateImpulseDir(const FHitResult& traceResult) const override;
 };

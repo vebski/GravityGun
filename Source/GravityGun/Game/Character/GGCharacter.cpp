@@ -51,3 +51,8 @@ USkeletalMeshComponent* AGGCharacter::GetWeaponAttachmentComponent() const
 	return FPArmsMeshComponent;
 }
 
+UCameraComponent* AGGCharacter::GetCameraComponent() const
+{
+	return CameraComponent;
+}
+

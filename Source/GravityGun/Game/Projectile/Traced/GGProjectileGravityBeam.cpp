@@ -25,9 +25,7 @@ void AGGProjectileGravityBeam::ProcessHits(const TArray<FHitResult>& traceResult
 			AGGPhysicsItem* blockingActor = Cast<AGGPhysicsItem>(blockingHit.Actor.Get());
 			if (blockingActor != nullptr)
 			{
-				const FVector impluseDir = (blockingHit.ImpactNormal * -1.0f) *  CalculateForce(blockingHit.ImpactPoint);
-
-				// #TODO_Dawid we should adjust the dir to push the object away from player in more predictable and "straight" line, currently its too random due to impact normal
+				const FVector impluseDir = CalculateImpulseDir(blockingHit) *  CalculateForce(blockingHit.ImpactPoint);
 
 				blockingActor->GetMainComponent()->AddImpulseAtLocation(impluseDir, blockingHit.ImpactPoint);
 			}
@@ -51,4 +49,10 @@ float AGGProjectileGravityBeam::CalculateForce(const FVector& targetPos) const
 	}
 
 	return force;
+}
+
+FVector AGGProjectileGravityBeam::CalculateImpulseDir(const FHitResult& traceResult) const
+{
+	// #TODO_Dawid we should adjust the dir to push the object away from player in more predictable and "straight" line, currently its too random due to impact normal
+	return traceResult.ImpactNormal * -1.0f;
 }

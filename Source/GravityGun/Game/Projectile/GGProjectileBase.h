@@ -15,6 +15,10 @@ class GRAVITYGUN_API AGGProjectileBase : public AActor
 
 protected:
 
+	// whenever this projectile should use screen center as its origin
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+	bool bSpawnAtViewCenter = false;
+
 	UPROPERTY()
 	AGGWeaponBase* OwningWeapon = nullptr;
 
@@ -29,4 +33,10 @@ public:
 	virtual void InitializeProjectile(AGGWeaponBase* owningWeapon);
 
 	virtual void DestroyProjectile();
+
+	bool ShouldSpawnAtViewCenter() const
+	{
+		return bSpawnAtViewCenter;
+	}
+
 };

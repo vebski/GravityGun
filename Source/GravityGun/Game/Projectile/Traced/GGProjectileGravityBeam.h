@@ -27,4 +27,6 @@ protected:
 
 	virtual float CalculateForce(const FVector& targetPos) const;
 
+	virtual FVector CalculateImpulseDir(const FHitResult& traceResult) const;
+
 };
