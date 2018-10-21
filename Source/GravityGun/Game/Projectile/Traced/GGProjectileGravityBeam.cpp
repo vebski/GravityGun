@@ -4,6 +4,7 @@
 #include "DrawDebugHelpers.h"
 #include "Game/GGPhysicsItem.h"
 #include "Components/PrimitiveComponent.h"
+#include "Curves/CurveFloat.h"
 
 
 
@@ -24,8 +25,7 @@ void AGGProjectileGravityBeam::ProcessHits(const TArray<FHitResult>& traceResult
 			AGGPhysicsItem* blockingActor = Cast<AGGPhysicsItem>(blockingHit.Actor.Get());
 			if (blockingActor != nullptr)
 			{
-				// #TODO_Dawid add distance based scaling - fruther it is, weaker the impulse
-				const FVector impluseDir = (blockingHit.ImpactNormal * -1.0f) * ImpulseForce;
+				const FVector impluseDir = (blockingHit.ImpactNormal * -1.0f) *  CalculateForce(blockingHit.ImpactPoint);
 
 				// #TODO_Dawid we should adjust the dir to push the object away from player in more predictable and "straight" line, currently its too random due to impact normal
 
@@ -35,4 +35,20 @@ void AGGProjectileGravityBeam::ProcessHits(const TArray<FHitResult>& traceResult
 	}
 
 	DestroyProjectile();
+}
+
+float AGGProjectileGravityBeam::CalculateForce(const FVector& targetPos) const
+{
+	float force = ImpulseForce;
+	// calculate distance scaling based on the curve
+	if (ForceScaling != nullptr)
+	{
+		const float dist = FVector::Dist(GetActorLocation(), targetPos);
+
+		// map distance to 0.0 -> 1.0 range (we use normalized curves)
+		const float t = FMath::GetMappedRangeValueClamped(FVector2D(0.0f, TraceLength), FVector2D(0.0f, 1.0f), dist);
+		force = force * ForceScaling->GetFloatValue(t);
+	}
+
+	return force;
 }
