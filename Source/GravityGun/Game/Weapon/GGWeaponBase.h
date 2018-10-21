@@ -113,6 +113,8 @@ protected:
 
 	virtual bool CanFireSecondary() const;
 
+	virtual FTransform CalculateProjectileSpawnTransform(TSubclassOf<AGGProjectileBase> projectileTemplate) const;
+
 public:	
 	
 	virtual void Tick(float deltaTime) override;

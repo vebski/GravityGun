@@ -103,15 +103,7 @@ void AGGWeaponBase::CompleteUnequop()
 
 AGGProjectileBase* AGGWeaponBase::SpawnProjectile(TSubclassOf<AGGProjectileBase> projectileTemplate)
 {
-	FTransform spawnTransform = MuzzleComponent->GetComponentTransform();
-	// check if projectile wants to spawn at center view and weapon is used by character with camera
-	if (projectileTemplate.GetDefaultObject() != nullptr && projectileTemplate.GetDefaultObject()->ShouldSpawnAtViewCenter())
-	{
-		if (GetOwningCharacter() != nullptr && GetOwningCharacter()->GetCameraComponent() != nullptr)
-		{
-			spawnTransform = GetOwningCharacter()->GetCameraComponent()->GetComponentTransform();
-		}
-	}
+	FTransform spawnTransform = CalculateProjectileSpawnTransform(projectileTemplate);
 
 	AGGProjectileBase* newProjectile = GetWorld()->SpawnActor<AGGProjectileBase>(projectileTemplate, spawnTransform);
 	newProjectile->InitializeProjectile(this);
@@ -128,6 +120,21 @@ bool AGGWeaponBase::CanFirePrimary() const
 bool AGGWeaponBase::CanFireSecondary() const
 {
 	return bIsSecondaryFireActive == true && CurrentSecondaryFirerateCooldown <= 0.0f;
+}
+
+FTransform AGGWeaponBase::CalculateProjectileSpawnTransform(TSubclassOf<AGGProjectileBase> projectileTemplate) const
+{
+	FTransform spawnTransform = MuzzleComponent->GetComponentTransform();
+	// check if projectile wants to spawn at center view and weapon is used by character with camera
+	if (projectileTemplate.GetDefaultObject() != nullptr && projectileTemplate.GetDefaultObject()->ShouldSpawnAtViewCenter())
+	{
+		if (GetOwningCharacter() != nullptr && GetOwningCharacter()->GetCameraComponent() != nullptr)
+		{
+			spawnTransform = GetOwningCharacter()->GetCameraComponent()->GetComponentTransform();
+		}
+	}
+
+	return spawnTransform;
 }
 
 // Called every frame

@@ -6,7 +6,8 @@
 #include "../GGPhysicsItem.h"
 #include "Components/ArrowComponent.h"
 #include "GGGravityPullComponent.h"
-
+#include "../Character/GGCharacter.h"
+#include "../Projectile/Traced/GGProjectileTraced.h"
 
 AGGWeaponGravityGun::AGGWeaponGravityGun()
 {
@@ -51,15 +52,46 @@ void AGGWeaponGravityGun::SecondaryFire()
 	}
 }
 
+bool AGGWeaponGravityGun::CheckTraceForProjectile(TSubclassOf<AGGProjectileBase> projectileTemplate) const
+{
+	FTransform spawnTransform = CalculateProjectileSpawnTransform(projectileTemplate);
+
+	// #TODO_Dawid this could be probably better if projectiles had function that could provide uniform behavior instead of rewriting it
+	AGGProjectileTraced* projectileTrace = projectileTemplate->GetDefaultObject<AGGProjectileTraced>();
+	check(projectileTrace != nullptr);
+
+	const FVector traceStart = spawnTransform.GetLocation();
+	const FVector traceEnd = traceStart + (spawnTransform.GetRotation().GetForwardVector() * projectileTrace->GetTraceLength());
+
+	FCollisionQueryParams queryParams;
+	queryParams.bTraceComplex = true;
+
+	// Add weapon and its owner to ignore list so we avoid their collision
+	queryParams.AddIgnoredActor(this);
+	queryParams.AddIgnoredActor(GetOwningCharacter());
+
+	FHitResult hit;
+	GetWorld()->LineTraceSingleByChannel(hit, traceStart, traceEnd, ECC_TRACE_PROJECTILE, queryParams);
+
+	if (hit.bBlockingHit == true && hit.GetActor() != nullptr)
+	{
+		return Cast<AGGPhysicsItem>(hit.GetActor()) != nullptr;
+	}
+
+	return false;
+}
+
 void AGGWeaponGravityGun::PullPhysicsItem(AGGPhysicsItem* physicsItem)
 {
 	GravityPullComponent->StartPullingItem(physicsItem);
-	//if (physicsItem != nullptr)
-	//{
-	//	AttachedItem = physicsItem;
-	//	AttachedItem->GetMainComponent()->BodyInstance.SetInstanceSimulatePhysics(false);
-	//	AttachedItem->SetActorEnableCollision(false);
-	//	AttachedItem->AttachToComponent(GetMuzzleComponent(), FAttachmentTransformRules::KeepWorldTransform);
-	//	//AttachedItem->Attach
-	//}
+}
+
+bool AGGWeaponGravityGun::CanPushItem() const
+{
+	return CheckTraceForProjectile(PrimaryProjectileTemplate);
+}
+
+bool AGGWeaponGravityGun::CanPullItem() const
+{
+	return CheckTraceForProjectile(SecondaryProjectileTemplate);
 }

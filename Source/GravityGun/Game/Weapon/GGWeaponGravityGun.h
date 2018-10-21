@@ -31,7 +31,15 @@ protected:
 
 	virtual void SecondaryFire() override;
 
+	virtual bool CheckTraceForProjectile(TSubclassOf<AGGProjectileBase> projectileTemplate) const;
+
 public:
 	
 	virtual void PullPhysicsItem(AGGPhysicsItem* physicsItem);
+
+	UFUNCTION(BlueprintCallable)
+	virtual bool CanPushItem() const;
+
+	UFUNCTION(BlueprintCallable)
+	virtual bool CanPullItem() const;
 };

@@ -20,7 +20,9 @@ void AGGProjectileTraced::ProjectileTrace(TArray<FHitResult>& traceResults)
 	queryParams.AddIgnoredActor(OwningWeapon);
 	queryParams.AddIgnoredActor(OwningWeapon->GetOwningCharacter());
 
-	GetWorld()->LineTraceMultiByChannel(traceResults, traceStart, traceEnd, ECC_TRACE_PROJECTILE, queryParams);
+	FHitResult hit;
+	GetWorld()->LineTraceSingleByChannel(hit, traceStart, traceEnd, ECC_TRACE_PROJECTILE, queryParams);
+	traceResults.Add(hit);
 }
 
 void AGGProjectileTraced::ProcessHits(const TArray<FHitResult>& traceResults)
